@@ -17,7 +17,14 @@
 // each turn the enemy and player take turns attacking and loosen the health of the player 
 
 
+//Things left to do
+// 1: popup to enter name and add value to the character
+// 2: boss does 5 times damage after every 5 attack - Done
+// 3: popup for 
+// 4: Unique pictures for each character
+
 let bossTurn = 0;
+let bossAttack = 0;
 
 
 const player1 = {
@@ -25,7 +32,7 @@ const player1 = {
         name:'Erik',
         stats:{
             health: 100,
-            attack: 99
+            attack: 1
             },
         
 }
@@ -82,7 +89,7 @@ const enemies = [
         }
         ,
         {
-            name: 'Chevro Destroyer Of Life',
+            name: 'Chevro Destroyer Of Worlds',
                 stats: {
                     health: 120,
                     attack: 18,
@@ -111,9 +118,16 @@ let enemyWeaponTag = document.getElementById('enemyWeaponTag')
 
 let statusText = document.getElementById('statusText')
 let popup = document.getElementById('popup')
+let namePopup = document.getElementById('popupName')
 
+let player1Attack = player1.stats.attack 
 
 document.addEventListener('DOMContentLoaded', function(){
+    namePopup.style.visibility ='visible'
+    document.getElementById('container').style.opacity = '10%'
+    namePopup.style.opacity = '100%'
+
+    
     document.getElementById('playerName').textContent = player1.name
     playerHealthTag.textContent = `Health: ${player1.stats.health}`
     playerAttackTag.textContent = `Attack: ${player1.stats.attack}`
@@ -122,35 +136,40 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('enemyName').textContent = enemies[bossTurn].name
     enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
     enemyAttackTag.textContent = ` Attack: ${enemies[bossTurn].stats.attack}`
+    document.getElementById('buttonSubmit').addEventListener('click', function(){
+        document.getElementById('playerName').textContent = document.getElementById('characterName').value
+        document.getElementById('popupName').remove;
+        document.getElementById('container').style.opacity = '100%'
+    })
 })
 
-let player1Attack = player1.stats.attack 
 
-
-
-console.log(enemies[bossTurn].stats.attack)
-console.log(player1Attack)
-console.log(this.name)
 
 function bossDefeatedReward(){
  
 }
 
-function changeBossUntilWinCondition(){
-    console.log(`${player1.name} wins!!`)
-    popup.style.visibility = 'visible'
+async function changeBossUntilWinCondition(){
+    
     bossTurn += 1
+
     if(bossTurn < 6 ){
-    statusText.textContent = `Get Ready for ${enemies[bossTurn].name}`
+    statusText.textContent = `Congrats! You Win!! Get Ready for ${enemies[bossTurn].name} with these rewards`
     document.getElementById('enemyName').textContent = enemies[bossTurn].name
     enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
     enemyAttackTag.textContent = `Attack: ${enemies[bossTurn].stats.attack}`
-    } else if(bossTurn  == 6){
+    await timedMessage(2000)
+    popup.style.visibility = 'visible'
+    } 
+    else if(bossTurn  == 6){
         statusText.textContent = `This is the final boss ${enemies[bossTurn].name}. As his name states he is the destroyer of all worlds. If you do not defeat him your world will parish`
     document.getElementById('enemyName').textContent = enemies[bossTurn].name
     enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
     enemyAttackTag.textContent = `Attack: ${enemies[bossTurn].stats.attack}`
-    } else if(enemies[6].stats.health < 0){
+    await timedMessage(2000)
+    popup.style.visibility = 'visible'
+    } 
+    else if(enemies[6].stats.health < 0){
         statusText.textContent = 'You have saved the world!!'
     }
 }
@@ -163,13 +182,24 @@ async function pressingAttack(){
     
     
     if(enemies[bossTurn].stats.health > 0){
+    await timedMessage(1000)
     statusText.textContent = `You damaged the enemy for ${player1Attack} Damage` 
-    enemies[bossTurn].stats.health -= player1Attack
-    enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
-  
+    enemies[bossTurn].stats.health -= player1.stats.attack
+    enemyHealthTag.textContent  = `Health: ${enemies[bossTurn].stats.health}`
+    await timedMessage(1000)
+    if(bossAttack<5){
+        bossAttack++
+        console.log(bossAttack)
     statusText.textContent = `The enemy attacked you for ${enemies[bossTurn].stats.attack} damage`
     player1.stats.health -= enemies[bossTurn].stats.attack
     playerHealthTag.textContent = `Health: ${player1.stats.health}`
+    } else if(bossAttack = 5){
+        console.log(bossAttack)
+        bossAttack = 0;
+        statusText.textContent = `The enemy attacked you for ${enemies[bossTurn].stats.attack * 5} damage`
+    player1.stats.health -= (enemies[bossTurn].stats.attack * 5)
+    playerHealthTag.textContent = `Health: ${player1.stats.health}`
+    }
 
     }
     else if(enemies[bossTurn].stats.health <= 0){
@@ -195,10 +225,19 @@ async function pressingCharge(){
         if(enemies[bossTurn].stats.health > 0){
             statusText.textContent = `You wait one turn to charge your attack for double damage`
             await timedMessage(1000)
+            if(bossAttack <5){
             statusText.textContent =`The enemy attacked you for ${enemies[bossTurn].stats.attack} damage`
             await timedMessage(1000)
             player1.stats.health -= enemies[bossTurn].stats.attack
             playerHealthTag.textContent = `Health: ${player1.stats.health}`
+            } else if(boss = 5){
+            console.log(bossAttack)
+            bossAttack = 0;
+            await timedMessage(1000)
+            statusText.textContent = `The enemy attacked you for ${enemies[bossTurn].stats.attack * 5} damage`
+            player1.stats.health -= (enemies[bossTurn].stats.attack * 5)
+            playerHealthTag.textContent = `Health: ${player1.stats.health}`
+            }
             await timedMessage(2000)
             statusText.textContent = `You did double Damage!`
             await timedMessage(1000)
@@ -216,12 +255,13 @@ async function pressingCharge(){
 
 }
     addAttackButton.addEventListener('click', function(){
-        console.log('hello')
+        
         player1.stats.attack =  player1.stats.attack * 2 
+        console.log(player1.stats.attack)
         playerAttackTag.textContent = `Attack: ${player1.stats.attack}`
-         popup.style.visibility = 'hidden'
+        popup.style.visibility = 'hidden'
     })
-    console.log('hello')
+    
      healSelfButton.addEventListener('click', function(){
          player1.stats.health = 100
          playerHealthTag.textContent = `Health: ${player1.stats.health}`
