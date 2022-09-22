@@ -14,118 +14,92 @@
 // Animation once project is done and I have time
 // OOP
 
-let attackTurn;
-let playButton = document.getElementById('autoplay')
+// each turn the enemy and player take turns attacking and loosen the health of the player 
 
 
-
-let weapons = {
-
-    woodSword: {
-        weaponName: 'Wood Sword',
-        attack: 1
-    },
-    ironSword: {
-        weaponName:'Iron Sword',
-        attack: 2
-    },
-    steelSword: {
-        weaponName: 'Steel Sword',
-        attack: 4
-    },
-    battleAxe: {
-        attack: 8
-    },
-    warHammer: {
-        attack: 16
-    },
-    steelGreatSword : {
-        attack: 32
-    },
-    swordOfInfinitePower: {
-        attack: 999
-    },
-
-}
-
-let armor = {   
-
-    woodArmor: {
-        defense: 2
-    },
-    ironArmor:{
-        defense: 4
-    },
-    steelArmor: {
-        defense: 8
-    },
-    carbonArmor: {
-        defense : 16
-    },
-    tungstenArmor: {
-        defense: 32
-    },
-    titaniumArmor: {
-        defense: 62
-    },
-    armorOfGods: {
-        defense: 999
-    },
-
-}
+let bossTurn = 0;
 
 
 const player1 = {
 
         name:'Erik',
-        inventory:{
-        armor: 0,
-        weapon: weapons.woodSword.attack,
-        weaponName: weapons.woodSword.weaponName,
-        },
         stats:{
             health: 100,
-            defense: 0,
-            attack: weapons.woodSword.attack
+            attack: 99
             },
         
 }
 
-const enemies = {
-borgor: {
-
+const enemies = [
     
-
-        name: 'borgor',
-        stats: {
-        health: 40,
-        attack: 1,
-        defense: 0,
-        },
-        inventory: {
-        armor:0,
-        weapon: weapons.ironSword.attack,
-        weaponName: weapons.ironSword.weaponName
+{
+            name:'Borgor the half Demon',
+                stats: {
+                    health: 40,
+                    attack: 3,
+                },
+                
         }
+,
+        {
+            name: 'Funedad the tree spirit',
+                stats: {
+                    health: 50,
+                    attack: 4,
+                },
+        }
+,
+        {
+            name: 'Xeindryt The Scary',
+                stats: {
+                    health: 50,
+                    attack: 4,
+                },
+        }
+        ,
+        {
+            name: 'Cyrril Lord Of The Red',
+                stats: {
+                    health: 70,
+                    attack: 6,
+                },
+        }
+        ,
+        {
+            name: 'Galzrei The Gifted One',
+                stats: {
+                    health: 80,
+                    attack: 9,
+                },
+        }
+        ,
+        {
+            name: 'Barurrat Eater Of All',
+                stats: {
+                    health: 90,
+                    attack: 13,
+                },
+        }
+        ,
+        {
+            name: 'Chevro Destroyer Of Life',
+                stats: {
+                    health: 120,
+                    attack: 18,
+                },
+        }
+    ]
 
-    
-},
-Funedad : {
 
-    name: 'Funedad',
-    stats: {
-    health: 50,
-    attack: 2,
-    defense: 0,
-    },
-    inventory: {
-    armor:0,
-    weapon: weapons.steelSword.attack,
-    weaponName: weapons.steelSword.weaponName
-    }
-}
-   
-}
+
+
+let attackTurn = 1;
+let attackButton = document.getElementById('buttonAttack')
+let blockButton = document.getElementById('buttonBlock')
+let chargeButton = document.getElementById('buttonCharge')
+let addAttackButton = document.getElementById('moreAttackButton')
+let healSelfButton = document.getElementById('healYourselfButton')
+
 let playerHealthTag = document.getElementById('playerHealthTag')
 let playerAttackTag = document.getElementById('playerAttackTag')
 let playerWeaponTag = document.getElementById('playerWeaponTag')
@@ -135,66 +109,128 @@ let enemyHealthTag = document.getElementById('enemyHealthTag')
 let enemyAttackTag = document.getElementById('enemyAttackTag')
 let enemyWeaponTag = document.getElementById('enemyWeaponTag')
 
+let statusText = document.getElementById('statusText')
+let popup = document.getElementById('popup')
+
+
 document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('playerName').textContent = player1.name
-    playerHealthTag.textContent = player1.stats.health
-    playerAttackTag.textContent = player1.stats.attack
-    playerWeaponTag.textContent = player1.inventory.weaponName
+    playerHealthTag.textContent = `Health: ${player1.stats.health}`
+    playerAttackTag.textContent = `Attack: ${player1.stats.attack}`
+  
 
-    document.getElementById('enemyName').textContent = enemies.borgor.name
-    enemyHealthTag.textContent = enemies.borgor.stats.health
-    enemyAttackTag.textContent = enemies.borgor.stats.attack
-    enemyWeaponTag.textContent = enemies.borgor.inventory.weaponName
+    document.getElementById('enemyName').textContent = enemies[bossTurn].name
+    enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
+    enemyAttackTag.textContent = ` Attack: ${enemies[bossTurn].stats.attack}`
 })
 
-
 let player1Attack = player1.stats.attack 
-player1Attack = player1.inventory.weapon + 2
 
 
 
+console.log(enemies[bossTurn].stats.attack)
 console.log(player1Attack)
 console.log(this.name)
 
-function bossfights(enemyType){
-
-
-let enemyAttack = enemyType.stats.attack
-    enemyAttack = enemyType.inventory.weapon
-
-while(player1.stats.health >= 0 && enemyType.stats.health >= 0){
-
-    if(player1.stats.health >= 0 && enemyType.stats.health >= 0){
-
-        player1.stats.health -= enemyAttack
-        enemyType.stats.health -= player1Attack
-        playerHealthTag.textContent -= enemyAttack
-        enemyHealthTag.textContent -= player1Attack
-        console.log(`The player has ${player1.stats.health} health and the enemy has ${enemyType.stats.health}`)
-
-    }
-
-    if(enemyType.stats.health <= 0){
-
-        console.log(`${player1.name} wins!!
-        Congrats! You looted an ${enemyType.inventory.weaponName}`)
-        player1.inventory.weapon = enemyType.inventory.weapon
-        player1.inventory.weaponName = enemyType.inventory.weaponName
-        player1Attack = player1.inventory.weapon + 2
-        playerWeaponTag.textContent = player1.inventory.weaponName
-        console.log(player1.inventory.weapon)
-        console.log(player1Attack)
-    }
-
+function bossDefeatedReward(){
+ 
 }
 
-
+function changeBossUntilWinCondition(){
+    console.log(`${player1.name} wins!!`)
+    popup.style.visibility = 'visible'
+    bossTurn += 1
+    if(bossTurn < 6 ){
+    statusText.textContent = `Get Ready for ${enemies[bossTurn].name}`
+    document.getElementById('enemyName').textContent = enemies[bossTurn].name
+    enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
+    enemyAttackTag.textContent = `Attack: ${enemies[bossTurn].stats.attack}`
+    } else if(bossTurn  == 6){
+        statusText.textContent = `This is the final boss ${enemies[bossTurn].name}. As his name states he is the destroyer of all worlds. If you do not defeat him your world will parish`
+    document.getElementById('enemyName').textContent = enemies[bossTurn].name
+    enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
+    enemyAttackTag.textContent = `Attack: ${enemies[bossTurn].stats.attack}`
+    } else if(enemies[6].stats.health < 0){
+        statusText.textContent = 'You have saved the world!!'
+    }
 }
 
+function timedMessage(mili) {
+    return new Promise(resolve => setTimeout(resolve, mili))
+}
 
-playButton.addEventListener('click', function(){
-bossfights(enemies.borgor)
-})
+async function pressingAttack(){
+    
+    
+    if(enemies[bossTurn].stats.health > 0){
+    statusText.textContent = `You damaged the enemy for ${player1Attack} Damage` 
+    enemies[bossTurn].stats.health -= player1Attack
+    enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
+  
+    statusText.textContent = `The enemy attacked you for ${enemies[bossTurn].stats.attack} damage`
+    player1.stats.health -= enemies[bossTurn].stats.attack
+    playerHealthTag.textContent = `Health: ${player1.stats.health}`
+
+    }
+    else if(enemies[bossTurn].stats.health <= 0){
+            
+        
+        changeBossUntilWinCondition()        
+ //popup show with two buttons. If one is clicked. Add more damage. if the other is clicked heal full 
+    } else if(enemies[6].stats.health < 0){
+        statusText.textContent = 'You have saved the world!!'
+    }
+}
+
+async function pressingBlock(){
+    statusText.textContent = `The enemy attempts to attack you for ${enemies[bossTurn].stats.attack} damage`
+    await timedMessage(2000)
+    statusText.textContent = `You have blocked the enemy's attack and taken no damage`
+}
+
+async function pressingCharge(){
+    //creating a function to return a promise and when the promise resolves we will use the set timeout with the miliseconds I put in 
+
+
+        if(enemies[bossTurn].stats.health > 0){
+            statusText.textContent = `You wait one turn to charge your attack for double damage`
+            await timedMessage(1000)
+            statusText.textContent =`The enemy attacked you for ${enemies[bossTurn].stats.attack} damage`
+            await timedMessage(1000)
+            player1.stats.health -= enemies[bossTurn].stats.attack
+            playerHealthTag.textContent = `Health: ${player1.stats.health}`
+            await timedMessage(2000)
+            statusText.textContent = `You did double Damage!`
+            await timedMessage(1000)
+            enemies[bossTurn].stats.health -= player1Attack * 2
+            enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
+            await timedMessage(1000)
+            statusText.textContent ='Choose your next move'
+        }
+            else if(enemies[bossTurn].stats.health <= 0){
+                changeBossUntilWinCondition()
+            } 
+                else if(enemies[6].stats.health < 0){
+                    statusText.textContent = 'You have saved the world!!'
+                }
+
+}
+    addAttackButton.addEventListener('click', function(){
+        console.log('hello')
+        player1.stats.attack =  player1.stats.attack * 2 
+        playerAttackTag.textContent = `Attack: ${player1.stats.attack}`
+         popup.style.visibility = 'hidden'
+    })
+    console.log('hello')
+     healSelfButton.addEventListener('click', function(){
+         player1.stats.health = 100
+         playerHealthTag.textContent = `Health: ${player1.stats.health}`
+         popup.style.visibility = 'hidden'
+     })
+
+buttonAttack.addEventListener('click', pressingAttack)
+buttonBlock.addEventListener('click', pressingBlock)
+chargeButton.addEventListener('click', pressingCharge)
 
 
 

@@ -8,33 +8,61 @@
     <title>Pixlers Autobattler</title>
 </head>
 <body>
-    <div>
-<h1>Pixler Autobattle</h1>
 
-<button id="autoplay">Fight for Freedom!</button>
-</div>
+    <div id="gameTitle">
 
+        <h1>Pixler Autobattle</h1>
+        <h2>Fight bosses to win Power, Fame and Glory!</h2>
 
-
-    <div id="playersheet"></div>
-    
-        <img src="playerImage.png" alt="Image of the player" id="playerImage">
-        <p id="playerName">Name</p>
-        <p id="playerHealthTag">Health:100</p>
-        <p id="playerAttackTag">Attack: 3</p>
-        <p id="playerWeaponTag">Weapon: Wood Sword</p>
-        
     </div>
+        
+<div id="container">
+
+    <div id="playersheet">
+        
+        <div>
+
+            <img src="playerImage.png" alt="Image of the player" id="playerImage">
+            <p id="playerName">Name</p>
+            <p id="playerHealthTag">Health:100</p>
+            <p id="playerAttackTag">Attack: 3</p>
+                
+                <div id = 'buttons'>
+                    <button id="buttonAttack">Attack</button>
+                    <button id="buttonBlock">Block</button>
+                    <button id="buttonCharge">Charge Attack</button>
+                </div>
+
+        </div>
+    </div>
+        <div id="popup">
+
+            <p>The next battle is coming. As a reward for you hard efforts. Please take one to help you with the next battle</p>
+            <button id="moreAttackButton">Double Damage</button>
+            <button id="healYourselfButton">Heal yourself to full</button>
+        
+        </div>
+ 
 
     <div id="enemysheet">
 
-        <img src="enemyPlayer.jpg" alt="Image of evil enemy that is trying to destroy you" id="enemyImage">
-        <p id="enemyName">name</p>
-        <p id="enemyHealthTag">Health</p>
-        <p id="enemyAttackTag">Attack</p>
-        <p id="enemyWeaponTag">Weapon</p>
-        
+        <div>
+            <img src="enemyPlayer.jpg" alt="Image of evil enemy that is trying to destroy you" id="enemyImage">
+            <p id="enemyName">name</p>
+            <p id="enemyHealthTag">Health</p>
+            <p id="enemyAttackTag">Attack</p>
+        </div>
+
     </div>
+
+
+
+
+</div>
+<div id="statusFeild">
+    <p id="statusText"></p>
+</div>
+
 
     <script src="milestone.js"></script>
 </body>

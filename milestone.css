@@ -1,4 +1,56 @@
 #playerImage{
-    width: 300px;
+    width: 150px;
+    height: 150px;
+}
+#enemyImage{
+    width: 150px;
+    height: 150px;
+}
+
+
+#popup{
+    width: 200px;
+    background-color:grey;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    border: 2px solid black;
+    visibility: hidden;
+}
+
+#container{
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+    
+}
+#playersheet{
+    align-self: flex-start;
+    background-color: grey;
+    border: 2px solid black;
+    text-align: center;
     height: 300px;
+}
+#enemysheet{
+    align-self: flex-end;
+    background-color: grey;
+    border: 2px solid black;
+    text-align: center;
+    width: 210px;
+    height: 300px;
+}
+
+#gameTitle{
+    text-align: center;
+}
+body{
+    background-image: url('battlefield.jpg');
+}
+#statusFeild{
+    text-align: center;
+    width: 500px;
+    height: 120px;
+    background-color: grey;
+    margin: auto;
+    border: 2px dotted black;
 }
