@@ -18,10 +18,10 @@
 
 
 //Things left to do
-// 1: popup to enter name and add value to the character
+// 1: popup to enter name and add value to the character - Done
 // 2: boss does 5 times damage after every 5 attack - Done
 // 3: popup for 
-// 4: Unique pictures for each character
+// 4: Unique pictures for each character - Done just need images
 
 let bossTurn = 0;
 let bossAttack = 0;
@@ -32,7 +32,7 @@ const player1 = {
         name:'Erik',
         stats:{
             health: 100,
-            attack: 1
+            attack: 3
             },
         
 }
@@ -43,7 +43,7 @@ const enemies = [
             name:'Borgor the half Demon',
                 stats: {
                     health: 40,
-                    attack: 3,
+                    attack: 50,
                 },
                 
         }
@@ -54,6 +54,7 @@ const enemies = [
                     health: 50,
                     attack: 4,
                 },
+                src:'animegirl.jpg'
         }
 ,
         {
@@ -136,9 +137,10 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('enemyName').textContent = enemies[bossTurn].name
     enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
     enemyAttackTag.textContent = ` Attack: ${enemies[bossTurn].stats.attack}`
-    document.getElementById('buttonSubmit').addEventListener('click', function(){
+    document.getElementById('nameSubmit').addEventListener('click', function(){
+        console.log('hello')
         document.getElementById('playerName').textContent = document.getElementById('characterName').value
-        document.getElementById('popupName').remove;
+        document.getElementById('popupName').remove();
         document.getElementById('container').style.opacity = '100%'
     })
 })
@@ -150,7 +152,7 @@ function bossDefeatedReward(){
 }
 
 async function changeBossUntilWinCondition(){
-    
+    attackButton.removeEventListener('click',pressingAttack)
     bossTurn += 1
 
     if(bossTurn < 6 ){
@@ -158,6 +160,7 @@ async function changeBossUntilWinCondition(){
     document.getElementById('enemyName').textContent = enemies[bossTurn].name
     enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
     enemyAttackTag.textContent = `Attack: ${enemies[bossTurn].stats.attack}`
+    document.getElementById('enemyImage').src = enemies[bossTurn].src
     await timedMessage(2000)
     popup.style.visibility = 'visible'
     } 
@@ -169,7 +172,7 @@ async function changeBossUntilWinCondition(){
     await timedMessage(2000)
     popup.style.visibility = 'visible'
     } 
-    else if(enemies[6].stats.health < 0){
+    else if(player1.stats.attack >= enemies[6].stats.health){
         statusText.textContent = 'You have saved the world!!'
     }
 }
@@ -179,9 +182,9 @@ function timedMessage(mili) {
 }
 
 async function pressingAttack(){
+
     
-    
-    if(enemies[bossTurn].stats.health > 0){
+    if(enemies[bossTurn].stats.health - player1.stats.attack > 0 && player1.stats.health - enemies[bossTurn].stats.attack > 0 ){
     await timedMessage(1000)
     statusText.textContent = `You damaged the enemy for ${player1Attack} Damage` 
     enemies[bossTurn].stats.health -= player1.stats.attack
@@ -200,16 +203,24 @@ async function pressingAttack(){
     player1.stats.health -= (enemies[bossTurn].stats.attack * 5)
     playerHealthTag.textContent = `Health: ${player1.stats.health}`
     }
+}
+    
 
+    else if(player1.stats.health - enemies[bossTurn].stats.attack <= 0 || player1.stats.health <= 0){
+        
+        statusText.textContent = 'You lose'
     }
-    else if(enemies[bossTurn].stats.health <= 0){
+
+
+    else if(enemies[bossTurn].stats.health - player1.stats.attack < 0){
             
         
         changeBossUntilWinCondition()        
  //popup show with two buttons. If one is clicked. Add more damage. if the other is clicked heal full 
-    } else if(enemies[6].stats.health < 0){
+    }  else if(enemies[6].stats.health < 0){
         statusText.textContent = 'You have saved the world!!'
     }
+    
 }
 
 async function pressingBlock(){
@@ -222,7 +233,7 @@ async function pressingCharge(){
     //creating a function to return a promise and when the promise resolves we will use the set timeout with the miliseconds I put in 
 
 
-        if(enemies[bossTurn].stats.health > 0){
+        if(enemies[bossTurn].stats.health - player1.stats.attack > 0 && player1.stats.health - enemies[bossTurn].stats.attack > 0){
             statusText.textContent = `You wait one turn to charge your attack for double damage`
             await timedMessage(1000)
             if(bossAttack <5){
@@ -246,6 +257,10 @@ async function pressingCharge(){
             await timedMessage(1000)
             statusText.textContent ='Choose your next move'
         }
+        else if(player1.stats.health - enemies[bossTurn].stats.attack <= 0 || player1.stats.health <= 0){
+        
+            statusText.textContent = 'You lose'
+        }
             else if(enemies[bossTurn].stats.health <= 0){
                 changeBossUntilWinCondition()
             } 
@@ -255,7 +270,7 @@ async function pressingCharge(){
 
 }
     addAttackButton.addEventListener('click', function(){
-        
+        buttonAttack.addEventListener('click', pressingAttack)
         player1.stats.attack =  player1.stats.attack * 2 
         console.log(player1.stats.attack)
         playerAttackTag.textContent = `Attack: ${player1.stats.attack}`
@@ -263,6 +278,7 @@ async function pressingCharge(){
     })
     
      healSelfButton.addEventListener('click', function(){
+        buttonAttack.addEventListener('click', pressingAttack)
          player1.stats.health = 100
          playerHealthTag.textContent = `Health: ${player1.stats.health}`
          popup.style.visibility = 'hidden'
