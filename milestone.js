@@ -50,16 +50,16 @@ const enemies = [
                     health: 50,
                     attack: 4,
                 },
-                src:'funedad.png'
+                src:'./assets/funedad.png'
         }
 ,
         {
             name: 'Xeindryt The Scary',
                 stats: {
-                    health: 50,
+                    health: 60,
                     attack: 4,
                 },
-                src:'xey.png'
+                src:'./assets/xey.png'
         }
         ,
         {
@@ -68,7 +68,7 @@ const enemies = [
                     health: 70,
                     attack: 6,
                 },
-                src: 'cyrill.png'
+                src: './assets/cyrill.png'
         }
         ,
         {
@@ -77,7 +77,7 @@ const enemies = [
                     health: 80,
                     attack: 9,
                 },
-                src: 'gal.jpg'
+                src: './assets/gal.jpg'
         }
         ,
         {
@@ -86,7 +86,7 @@ const enemies = [
                     health: 90,
                     attack: 13,
                 },
-                src: 'barr.png'
+                src: './assets/barr.png'
         }
         ,
         {
@@ -95,7 +95,7 @@ const enemies = [
                     health: 120,
                     attack: 18,
                 },
-                src: "chervo.png"
+                src: "./assets/chervo.png"
         }
     ]
 
@@ -162,7 +162,7 @@ async function changeBossUntilWinCondition(){
         statusText.textContent = `Congrats! You Win!! Get Ready for ${enemies[bossTurn].name} with these rewards`
         bossChange()
     } 
-    else if(bossTurn  == 6){
+    else if(bossTurn == 6){
         statusText.textContent = `This is the final boss ${enemies[bossTurn].name}. As his name states he is the destroyer of all worlds. If you do not defeat him your world will parish`
         bossChange()
     } 
@@ -178,7 +178,7 @@ function timedMessage(mili) {
 async function pressingAttack(){
 
     
-    if(enemies[bossTurn].stats.health > 0 && player1.stats.health - enemies[bossTurn].stats.attack > 0 ){
+    if(enemies[bossTurn].stats.health - player1.stats.attack  > 0 && player1.stats.health - enemies[bossTurn].stats.attack > 0 ){
         await timedMessage(1000)
         statusText.textContent = `You damaged the enemy for ${player1.stats.attack} Damage` 
         enemies[bossTurn].stats.health -= player1.stats.attack
@@ -200,14 +200,18 @@ async function pressingAttack(){
                     playerHealthTag.textContent = `Health: ${player1.stats.health}`
                 }
 
-                    if(enemies[bossTurn].stats.health - player1.stats.attack < 0){
+}
+                        
+                    else if( enemies[bossTurn].stats.health - player1.stats.attack <= 0){
+                        await timedMessage(1000)
+                        statusText.textContent = `You damaged the enemy for ${player1.stats.attack} Damage` 
+                        enemies[bossTurn].stats.health -= player1.stats.attack
+                        enemyHealthTag.textContent  = `Health: ${enemies[bossTurn].stats.health}`
+                        await timedMessage(1000)
                         enemies[bossTurn].stats.health = 0
                         enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
                         changeBossUntilWinCondition()        
                     }
-
-}
-    
 
                         else if(player1.stats.health - enemies[bossTurn].stats.attack <= 0 || player1.stats.health <= 0){
                             player1.stats.health = 0
@@ -233,7 +237,7 @@ async function pressingCharge(){
         
     
 
-    if(enemies[bossTurn].stats.health  > 0 && player1.stats.health - enemies[bossTurn].stats.attack > 0){
+    if(enemies[bossTurn].stats.health  >= 0 && player1.stats.health - enemies[bossTurn].stats.attack >= 0){
         statusText.textContent = `You wait one turn to charge your attack for double damage`
         await timedMessage(1000)
         if(bossAttack <5){
@@ -241,7 +245,7 @@ async function pressingCharge(){
         await timedMessage(1000)
         player1.stats.health -= enemies[bossTurn].stats.attack
         playerHealthTag.textContent = `Health: ${player1.stats.health}`
-                } else if(boss = 5){
+                } else if(bossAttack = 5){
                     console.log(bossAttack)
                     bossAttack = 0;
                     await timedMessage(1000)
@@ -257,7 +261,7 @@ async function pressingCharge(){
             await timedMessage(1000)
             statusText.textContent ='Choose your next move'
 
-                    if(enemies[bossTurn].stats.health - (player1.stats.attack * 2) < 0){
+                    if(enemies[bossTurn].stats.health - (player1.stats.attack * 2) <= 0){
                         enemies[bossTurn].stats.health = 0
                         enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
                         changeBossUntilWinCondition()        

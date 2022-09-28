@@ -44,7 +44,7 @@
     text-align: center;
 }
 body{
-    background-image: url('battlefield.jpg');
+    background-image: url('./assets/battlefield.jpg');
 }
 #statusFeild{
     text-align: center;
