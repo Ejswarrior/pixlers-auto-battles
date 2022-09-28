@@ -145,6 +145,12 @@ document.addEventListener('DOMContentLoaded', function(){
     })
 
 })
+function playerLose(){
+        player1.stats.health = 0
+        playerHealthTag.textContent = `Health: ${player1.stats.health}`
+        statusText.textContent = 'You lose'
+    
+}
 async function bossChange(){
     document.getElementById('enemyName').textContent = enemies[bossTurn].name
     enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
@@ -214,9 +220,7 @@ async function pressingAttack(){
                     }
 
                         else if(player1.stats.health - enemies[bossTurn].stats.attack <= 0 || player1.stats.health <= 0){
-                            player1.stats.health = 0
-                            playerHealthTag.textContent = `Health: ${player1.stats.health}`
-                            statusText.textContent = 'You lose'
+                            playerLose()
                         }
 
                             else if(enemies[6].stats.health < 0){
@@ -227,9 +231,17 @@ async function pressingAttack(){
 }
 
 async function pressingBlock(){
+    if(bossAttack < 5){
     statusText.textContent = `The enemy attempts to attack you for ${enemies[bossTurn].stats.attack} damage`
     await timedMessage(2000)
     statusText.textContent = `You have blocked the enemy's attack and taken no damage`
+    bossAttack++
+    }
+    else if(bossAttack == 5){
+        statusText.textContent = `The enemy attempts to attack you for ${enemies[bossTurn].stats.attack * 5} damage`
+    await timedMessage(2000)
+    statusText.textContent = `You have blocked the enemy's attack and taken no damage`
+    }
 }
 
 async function pressingCharge(){
@@ -237,7 +249,7 @@ async function pressingCharge(){
         
     
 
-    if(enemies[bossTurn].stats.health  >= 0 && player1.stats.health - enemies[bossTurn].stats.attack >= 0){
+    if(enemies[bossTurn].stats.health - player1.stats.attack  > 0 && player1.stats.health - enemies[bossTurn].stats.attack >= 0){
         statusText.textContent = `You wait one turn to charge your attack for double damage`
         await timedMessage(1000)
         if(bossAttack <5){
@@ -261,16 +273,15 @@ async function pressingCharge(){
             await timedMessage(1000)
             statusText.textContent ='Choose your next move'
 
-                    if(enemies[bossTurn].stats.health - (player1.stats.attack * 2) <= 0){
-                        enemies[bossTurn].stats.health = 0
-                        enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
-                        changeBossUntilWinCondition()        
-                    }
+               
+        }
+        else if(enemies[bossTurn].stats.health - (player1.stats.attack * 2) <= 0){
+            enemies[bossTurn].stats.health = 0
+            enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
+            changeBossUntilWinCondition()        
         }
     else if(player1.stats.health - enemies[bossTurn].stats.attack <= 0 || player1.stats.health <= 0){
-        player1.stats.health = 0
-        playerHealthTag.textContent = `Health: ${player1.stats.health}`
-        statusText.textContent = 'You lose'
+        playerLose()
     }
 
     else if(enemies[6].stats.health < 0){
@@ -278,6 +289,8 @@ async function pressingCharge(){
     }
 
 }
+
+
     addAttackButton.addEventListener('click', function(){
         buttonAttack.addEventListener('click', pressingAttack)
         player1.stats.attack =  player1.stats.attack * 2 
