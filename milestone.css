@@ -45,6 +45,8 @@
 }
 body{
     background-image: url('./assets/battlefield.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 #statusFeild{
     text-align: center;
