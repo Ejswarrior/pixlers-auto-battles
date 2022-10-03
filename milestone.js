@@ -272,8 +272,6 @@ async function pressingCharge(){
             enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
             await timedMessage(1000)
             statusText.textContent ='Choose your next move'
-
-               
         }
         else if(enemies[bossTurn].stats.health - (player1.stats.attack * 2) <= 0){
             enemies[bossTurn].stats.health = 0
