@@ -249,7 +249,7 @@ async function pressingCharge(){
         
     
 
-    if(enemies[bossTurn].stats.health - player1.stats.attack  > 0 && player1.stats.health - enemies[bossTurn].stats.attack >= 0){
+    if(enemies[bossTurn].stats.health - (player1.stats.attack*2)  > 0 && player1.stats.health - enemies[bossTurn].stats.attack >= 0){
         statusText.textContent = `You wait one turn to charge your attack for double damage`
         await timedMessage(1000)
         if(bossAttack <5){
@@ -273,10 +273,37 @@ async function pressingCharge(){
             await timedMessage(1000)
             statusText.textContent ='Choose your next move'
         }
-        else if(enemies[bossTurn].stats.health - (player1.stats.attack * 2) <= 0){
-            enemies[bossTurn].stats.health = 0
-            enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
-            changeBossUntilWinCondition()        
+
+
+
+        else if(enemies[bossTurn].stats.health - (player1.stats.attack * 2) <= 0 ){
+            statusText.textContent = `You wait one turn to charge your attack for double damage`
+            await timedMessage(1500)
+            if(bossAttack <5){
+            statusText.textContent =`The enemy attacked you for ${enemies[bossTurn].stats.attack} damage`
+            await timedMessage(1000)
+            player1.stats.health -= enemies[bossTurn].stats.attack
+            playerHealthTag.textContent = `Health: ${player1.stats.health}`
+                    } else if(bossAttack = 5){
+                        console.log(bossAttack)
+                        bossAttack = 0;
+                        await timedMessage(1000)
+                        statusText.textContent = `The enemy attacked you for ${enemies[bossTurn].stats.attack * 5} damage`
+                        player1.stats.health -= (enemies[bossTurn].stats.attack * 5)
+                        playerHealthTag.textContent = `Health: ${player1.stats.health}`
+                    }
+                await timedMessage(1500)
+                statusText.textContent = `You did double Damage!`
+                await timedMessage(1000)
+                enemies[bossTurn].stats.health -= player1Attack * 2
+                enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
+                await timedMessage(1000)
+                statusText.textContent ='Choose your next move'
+
+
+                    enemies[bossTurn].stats.health = 0
+                    enemyHealthTag.textContent = `Health: ${enemies[bossTurn].stats.health}`
+                    changeBossUntilWinCondition()        
         }
     else if(player1.stats.health - enemies[bossTurn].stats.attack <= 0 || player1.stats.health <= 0){
         playerLose()
